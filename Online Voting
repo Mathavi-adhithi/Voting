@@ -1,1 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Online Voting System</title>
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            background: #f2f2f2;
+        }
 
+        .container {
+            width: 400px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            margin-top: 50px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px gray;
+        }
+
+        button {
+            padding: 10px;
+            margin: 10px;
+            border: none;
+            background: blue;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background: darkblue;
+        }
+
+        .result {
+            margin-top: 20px;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>🗳 Online Voting System</h2>
+
+    <!-- User Name -->
+    <input type="text" id="username" placeholder="Enter your name"><br><br>
+
+    <!-- Candidate Selection -->
+    <h3>Select Candidate</h3>
+    <input type="radio" name="candidate" value="Candidate A"> Candidate A<br>
+    <input type="radio" name="candidate" value="Candidate B"> Candidate B<br>
+    <input type="radio" name="candidate" value="Candidate C"> Candidate C<br>
+
+    <br>
+
+    <!-- Buttons -->
+    <button onclick="submitVote()">Submit Vote</button>
+    <button onclick="showResults()">Show Results</button>
+
+    <!-- Result -->
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+    let votes = {
+        "Candidate A": 0,
+        "Candidate B": 0,
+        "Candidate C": 0
+    };
+
+    // Store voted users
+    let votedUsers = [];
+
+    function submitVote() {
+        let username = document.getElementById("username").value;
+        let candidates = document.getElementsByName("candidate");
+
+        // Validation
+        if (username === "") {
+            alert("Please enter your name");
+            return;
+        }
+
+        // One vote per user
+        if (votedUsers.includes(username)) {
+            alert("You have already voted!");
+            return;
+        }
+
+        let selected = null;
+        for (let c of candidates) {
+            if (c.checked) {
+                selected = c.value;
+            }
+        }
+
+        if (selected === null) {
+            alert("Please select a candidate");
+            return;
+        }
+
+        // Add vote
+        votes[selected]++;
+        votedUsers.push(username);
+
+        alert("Vote submitted successfully!");
+
+        // Reset form
+        document.getElementById("username").value = "";
+        for (let c of candidates) c.checked = false;
+    }
+
+    function showResults() {
+        let resultDiv = document.getElementById("result");
+
+        resultDiv.innerHTML = "<h3>Results:</h3>";
+        for (let candidate in votes) {
+            resultDiv.innerHTML += candidate + ": " + votes[candidate] + " votes<br>";
+        }
+    }
+</script>
+
+</body>
+</html>
